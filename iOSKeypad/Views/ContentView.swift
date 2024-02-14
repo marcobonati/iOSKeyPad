@@ -48,7 +48,8 @@ struct ContentView: View {
                     .padding()
                 Spacer()
                 
-                Text("Amount Value: \(String(amount))")
+                Text("Amount Double Value: \(String(amount))")
+                    .font(.footnote)
                 
               }
 

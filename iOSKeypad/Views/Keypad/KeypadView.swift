@@ -99,6 +99,9 @@ struct KeypadView: View, KeypadButtonDelegate {
                 }
             }
         }
+        .overlay(content: {
+            Text("Internal buffer: \(internalBuffer)").font(.footnote).foregroundStyle(.secondary)
+        })
     }
     
     func onButtonLongPress(button: KeypadButtonType) {
@@ -135,12 +138,23 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
 
     private func handleDeletePressed(_ button: KeypadButtonType) {
+        if (internalBuffer.isEmpty && self.values.count <= 1){
+            return
+        }
         if !internalBuffer.isEmpty {
             internalBuffer.removeLast()
+        } else {
+            self.values.removeLast()
+            self.internalBuffer = textConverter.keypadBufferTextFromDouble(self.values[self.values.count-1].value!)
         }
         valueDidChanged(internalBuffer)
     }
-
+    
+    private func internalBufferFromValue(_ value: Double){
+        let strValue = String(value)
+        
+    }
+    
     private func handleOperatorPressed(_ button: KeypadButtonType) {
         commitCurrentValue()
     }
@@ -225,6 +239,17 @@ private struct KeypadViewTextConverter {
             return input
         }
     }
+    
+    func keypadBufferTextFromDouble(_ value: Double)-> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .none
+        if let formattedString = numberFormatter.string(from: NSNumber(value: value)) {
+            return formattedString
+        } else {
+            return ""
+        }
+    }
+    
 }
 
 // struct ContentView_Previews: PreviewProvider {
