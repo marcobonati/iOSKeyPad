@@ -16,7 +16,15 @@ struct ContentView: View {
     @State(initialValue: 0) var amount: Double
     
     @State var showExpression = false
- 
+    
+    let currencyFormatter = NumberFormatter()
+    
+    init(){
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = Locale.current
+        currencyFormatter.currencySymbol = ""
+    }
+    
     var body: some View {
         VStack {
         
@@ -25,7 +33,9 @@ struct ContentView: View {
                 if (showExpression){
                     Text(expressionText())
                         .font(.headline)
-                        .padding()
+                        .fontWeight(.bold)
+                        .foregroundStyle(.secondary)
+                        .padding(3)
                 }
                 
                 Text(amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
@@ -40,11 +50,7 @@ struct ContentView: View {
                 
                 Text("Amount Value: \(String(amount))")
                 
-                Toggle(isOn: $showMathOperations.animation()) {
-                    Text("Show Math Operations")
-                }
-                
-               }
+              }
 
         }
         .padding()
@@ -60,8 +66,8 @@ struct ContentView: View {
     
     func expressionText()-> String {
         var nonZeroValues = values.filter({ !$0.isZero })
-        let strValues = nonZeroValues.map { String($0) }
-        return strValues.joined(separator: " + ")
+        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0))! }
+        return strValues.joined(separator: "+ ")
     }
     
     func totalAmount()-> Double {
