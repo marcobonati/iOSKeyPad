@@ -107,6 +107,7 @@ class KeypadModel: ObservableObject, KeypadButtonDelegate {
     let currencyMask = Veil(pattern: "## / ##")
     
     init(buttons: [KeypadButtonModel], buttonsDelegate: KeypadButtonDelegateProxy) {
+        self.textValue = ""
         self.buttons = buttons
         self.buttonsDelegateProxy = buttonsDelegate
         self.buttonsDelegateProxy.delegate = self
