@@ -12,7 +12,7 @@ struct KeypadView: View, KeypadButtonDelegate {
     @Binding var value: Double
     @Binding var showSecondaryButtons: Bool
 
-    @State private var textInternal: String = ""
+    @State private var internalBuffer: String = ""
     private var model: KeypadModel = .normalKeypad()
     private var secondaryModel: KeypadModel = .mathOperationsKeypad()
     private let textConverter = KeypadViewTextConverter(decimals: 2)
@@ -68,12 +68,12 @@ struct KeypadView: View, KeypadButtonDelegate {
     
     func onButtonLongPress(button: KeypadButtonType) {
         if button == .Accessory_Delete {
-            self.textInternal = ""
+            self.internalBuffer = ""
             self.value = 0
         }
         
         if button == .Numeric_00 {
-            withAnimation(.snappy){
+            withAnimation(.snappy(duration:0.3)){
                 self.showSecondaryButtons.toggle()
             }
         }
@@ -92,26 +92,26 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
     
     private func handleNumericPressed(_ button: KeypadButtonType){
-        if (button == .Numeric_0 || button == .Numeric_00) && textInternal.isEmpty {
+        if (button == .Numeric_0 || button == .Numeric_00) && internalBuffer.isEmpty {
             return
         }
-        textInternal.append(button.rawValue)
-        valueDidChanged()
+        internalBuffer.append(button.rawValue)
+        valueDidChanged(internalBuffer)
     }
 
     private func handleDeletePressed(_ button: KeypadButtonType){
-        if !textInternal.isEmpty {
-            textInternal.removeLast()
+        if !internalBuffer.isEmpty {
+            internalBuffer.removeLast()
         }
-        valueDidChanged()
+        valueDidChanged(internalBuffer)
     }
 
     private func handleOperatorPressed(_ button: KeypadButtonType){
         //TODO!!
     }
     
-    private func valueDidChanged(){
-        self.value = textConverter.keypadTextToDouble(textInternal) ?? 0
+    private func valueDidChanged(_ stringValue: String){
+        self.value = textConverter.keypadTextToDouble(stringValue) ?? 0
     }
 
 }
