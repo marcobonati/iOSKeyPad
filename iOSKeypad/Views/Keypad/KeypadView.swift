@@ -145,7 +145,7 @@ struct KeypadView: View, KeypadButtonDelegate {
             internalBuffer.removeLast()
         } else {
             self.values.removeLast()
-            self.internalBuffer = textConverter.keypadBufferTextFromDouble(self.values[self.values.count-1].value!)
+            self.internalBuffer = textConverter.keypadBufferTextFromDouble(self.values[self.values.count-1].value)
         }
         valueDidChanged(internalBuffer)
     }
@@ -172,11 +172,6 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
 }
 
-enum KeypadValueElementType {
-    case Value
-    case Operator
-}
-
 enum KeypadValueOperator {
     case Addition
     case Subtraction
@@ -185,18 +180,16 @@ enum KeypadValueOperator {
 }
 
 struct KeypadValueElement: Equatable {
-    var elementType: KeypadValueElementType
-    var value: Double?
+    var value: Double
     var operatorType: KeypadValueOperator?
     
     static func ==(lhs: KeypadValueElement, rhs: KeypadValueElement) -> Bool {
-        return lhs.elementType == rhs.elementType &&
-            lhs.value == rhs.value &&
+        return lhs.value == rhs.value &&
             lhs.operatorType == rhs.operatorType
     }
     
     static func valueElement(_ value: Double)-> KeypadValueElement {
-        KeypadValueElement(elementType: .Value, value: value)
+        KeypadValueElement(value: value)
     }
 }
 

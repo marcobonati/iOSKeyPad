@@ -66,16 +66,14 @@ struct ContentView: View {
     }
     
     func expressionText()-> String {
-        let valuesOnly = values.filter({ $0.elementType == .Value })
-        let nonZeroValues = valuesOnly.filter({ !$0.value!.isZero })
-        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0.value!))! }
+        let nonZeroValues = values.filter({ !$0.value.isZero })
+        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0.value))! }
         return strValues.joined(separator: "+ ")
     }
     
     func totalAmount()-> Double {
-        let valuesOnly = values.filter({ $0.elementType == .Value })
-        return valuesOnly.reduce(0) { (result, item) in
-            return result + item.value!
+        return values.reduce(0) { (result, item) in
+            return result + item.value
         }
     }
     
