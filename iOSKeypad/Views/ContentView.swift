@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State var showMathOperations = false
-    @State(initialValue: [0]) var values: [Double]
+    @State(initialValue: [KeypadValueElement.valueElement(0)]) var values: [KeypadValueElement]
     @State(initialValue: "") var amountText: String
     @State(initialValue: 0) var amount: Double
     
@@ -65,13 +65,17 @@ struct ContentView: View {
     }
     
     func expressionText()-> String {
-        var nonZeroValues = values.filter({ !$0.isZero })
-        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0))! }
+        let valuesOnly = values.filter({ $0.elementType == .Value })
+        let nonZeroValues = valuesOnly.filter({ !$0.value!.isZero })
+        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0.value!))! }
         return strValues.joined(separator: "+ ")
     }
     
     func totalAmount()-> Double {
-        return values.reduce(0.0, +)
+        let valuesOnly = values.filter({ $0.elementType == .Value })
+        return valuesOnly.reduce(0) { (result, item) in
+            return result + item.value!
+        }
     }
     
 }

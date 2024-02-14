@@ -9,12 +9,12 @@ import SwiftUI
 
 struct KeypadView: View, KeypadButtonDelegate {
     @Binding var showSecondaryButtons: Bool
-    @Binding var values: [Double]
+    @Binding var values: [KeypadValueElement]
 
     @State private var internalBuffer: String = ""
     private let textConverter = KeypadViewTextConverter(decimals: 2)
     
-    init(values: Binding<[Double]>,
+    init(values: Binding<[KeypadValueElement]>,
          showSecondaryButtons: Binding<Bool>)
     {
         _values = values
@@ -104,7 +104,7 @@ struct KeypadView: View, KeypadButtonDelegate {
     func onButtonLongPress(button: KeypadButtonType) {
         if button == .Accessory_Delete {
             internalBuffer = ""
-            values[values.count-1] = 0
+            values[values.count-1].value = 0
         }
         
         if button == .Numeric_00 {
@@ -147,14 +147,42 @@ struct KeypadView: View, KeypadButtonDelegate {
     
     private func valueDidChanged(_ stringValue: String) {
         if values.isEmpty {
-            values.append(0)
+            values.append(.valueElement(0))
         }
-        values[values.count-1] = textConverter.keypadTextToDouble(stringValue) ?? 0
+        values[values.count-1].value = textConverter.keypadTextToDouble(stringValue) ?? 0
     }
 
     private func commitCurrentValue() {
-        values.append(0)
+        values.append(.valueElement(0))
         internalBuffer = ""
+    }
+}
+
+enum KeypadValueElementType {
+    case Value
+    case Operator
+}
+
+enum KeypadValueOperator {
+    case Addition
+    case Subtraction
+    case Multiplication
+    case Division
+}
+
+struct KeypadValueElement: Equatable {
+    var elementType: KeypadValueElementType
+    var value: Double?
+    var operatorType: KeypadValueOperator?
+    
+    static func ==(lhs: KeypadValueElement, rhs: KeypadValueElement) -> Bool {
+        return lhs.elementType == rhs.elementType &&
+            lhs.value == rhs.value &&
+            lhs.operatorType == rhs.operatorType
+    }
+    
+    static func valueElement(_ value: Double)-> KeypadValueElement {
+        KeypadValueElement(elementType: .Value, value: value)
     }
 }
 
