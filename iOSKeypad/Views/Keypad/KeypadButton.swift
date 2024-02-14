@@ -9,6 +9,7 @@ import SwiftUI
 
 protocol KeypadButtonDelegate {
     func onButtonPressed(button: KeypadButtonType)
+    func onButtonLongPress(button: KeypadButtonType)
 }
 
 public enum KeypadButtonType: String {
@@ -78,6 +79,12 @@ struct KeypadButton: View {
                                         }
                                     )
                           )
+                          .onTapGesture {
+                              model.delegate?.onButtonPressed(button: model.buttonType)
+                          }
+                          .onLongPressGesture(minimumDuration: 0.1) {
+                              model.delegate?.onButtonLongPress(button: model.buttonType)
+                          }
                   }
                 
         }

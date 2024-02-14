@@ -13,12 +13,20 @@ struct KeypadView: View, KeypadButtonDelegate {
     @Binding var value: Double
     @Binding var showSecondaryButtons: Bool
 
+    @State private var textInternal: String = ""
+    private var model: KeypadModel = .normalKeypad()
+    private var secondaryModel: KeypadModel = .mathOperationsKeypad()
+    private let textConverter = KeypadViewTextConverter(decimals: 2)
     
-    @State var textInternal: String = ""
-    var model: KeypadModel = .normalKeypad()
-    var secondaryModel: KeypadModel = .mathOperationsKeypad()
-
-    var body: some View {
+    init(textValue: Binding<String>,
+         value: Binding<Double>,
+         showSecondaryButtons: Binding<Bool>) {
+           _textValue = textValue
+           _value = value
+           _showSecondaryButtons = showSecondaryButtons
+    }
+    
+    public var body: some View {
         HStack {
             VStack {
                 HStack {
@@ -53,6 +61,7 @@ struct KeypadView: View, KeypadButtonDelegate {
                         KeypadButton(model: secondaryModel.buttons[3])
                     }
                 }
+                
             }
         }.onAppear {
             model.delegate = self
@@ -60,6 +69,10 @@ struct KeypadView: View, KeypadButtonDelegate {
         }
     }
     
+    func onButtonLongPress(button: KeypadButtonType) {
+        //TODO!! handle long press
+    }
+
     func onButtonPressed(button: KeypadButtonType) {
         debugPrint("onButtonPressed \(button)")
         switch button {
@@ -73,26 +86,43 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
     
     private func handleNumericPressed(_ button: KeypadButtonType){
-        if (button == .Numeric_0 || button == .Numeric_00) && textValue.isEmpty {
+        if (button == .Numeric_0 || button == .Numeric_00) && textInternal.isEmpty {
             return
         }
         textInternal.append(button.rawValue)
+        valueDidChanged()
     }
 
     private func handleDeletePressed(_ button: KeypadButtonType){
         if !textInternal.isEmpty {
             textInternal.removeLast()
         }
+        valueDidChanged()
     }
 
     private func handleOperatorPressed(_ button: KeypadButtonType){
         //TODO!!
+    }
+    
+    private func valueDidChanged(){
+        self.value = textConverter.keypadTextToDouble(textInternal) ?? 0
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        numberFormatter.locale = Locale.current
+        if let formattedString = numberFormatter.string(from: NSNumber(value: self.value)) {
+            self.textValue = formattedString
+        } else {
+            self.textValue = "#ERROR#"
+        }
     }
 
 }
 
 class KeypadButtonDelegateProxy: KeypadButtonDelegate {
     var delegate: KeypadButtonDelegate?
+    func onButtonLongPress(button: KeypadButtonType) {
+        delegate?.onButtonLongPress(button: button)
+    }
     func onButtonPressed(button: KeypadButtonType) {
         delegate?.onButtonPressed(button: button)
     }
@@ -116,6 +146,10 @@ class KeypadModel: ObservableObject, KeypadButtonDelegate {
     func onButtonPressed(button: KeypadButtonType) {
         _onButtonPressed(button: button)
         delegate?.onButtonPressed(button: button)
+    }
+    
+    func onButtonLongPress(button: KeypadButtonType) {
+        delegate?.onButtonLongPress(button: button)
     }
     
     func _onButtonPressed(button: KeypadButtonType) {
@@ -216,6 +250,49 @@ extension KeypadModel {
     }
 }
 
+fileprivate struct KeypadViewTextConverter {
+    
+    var decimals: Int
+    let numberFormatter = NumberFormatter()
+    let locale = Locale.current
+    var decimalSeparator: String
+    
+    init(decimals: Int){
+        self.decimals = decimals
+        self.numberFormatter.numberStyle = .decimal
+        self.numberFormatter.locale = locale
+        self.decimalSeparator = locale.decimalSeparator ?? "."
+    }
+    
+    func keypadTextToDouble(_ input: String)-> Double?  {
+        let stringNumber = makeStringWithDecimal(padStringWithZeros(input))
+        if let formattedNumber = numberFormatter.number(from: stringNumber) {
+            return formattedNumber.doubleValue
+        } else {
+            return nil
+        }
+    }
+    
+    func makeStringWithDecimal(_ input: String)-> String {
+        guard input.count >= decimals else {
+            return input
+        }
+        let index = input.index(input.endIndex, offsetBy: -2)
+        let modifiedString = input.prefix(upTo: index) + String(decimalSeparator) + input.suffix(from: index)
+        return String(modifiedString)
+    }
+    
+    func padStringWithZeros(_ input: String) -> String {
+        let padLen = decimals + 1
+        if input.count < padLen {
+            return String(String(input.reversed()).padding(toLength: padLen, withPad: "0", startingAt: 0).reversed())
+        } else {
+            return input
+        }
+    }
+    
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
@@ -223,7 +300,9 @@ struct ContentView_Previews: PreviewProvider {
             Text("112,53$")
                 .font(.system(size: 40, weight: .medium, design: .rounded))
             Spacer()
-            KeypadView(textValue: .constant(""), value: .constant(3.13), showSecondaryButtons: .constant(true))
+            KeypadView(textValue: .constant(""), 
+                       value: .constant(3.13),
+                       showSecondaryButtons: .constant(true))
                 .frame(maxHeight: 450)
                 .padding()
             Spacer()

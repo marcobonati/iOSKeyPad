@@ -109,6 +109,7 @@
 				02B890852B7BA4C500EC413C /* iOSKeypadTestTests */,
 				02B8908F2B7BA4C500EC413C /* iOSKeypadTestUITests */,
 				02B890722B7BA4BC00EC413C /* Products */,
+				02B890C22B7CC13F00EC413C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -195,6 +196,13 @@
 				02B890B52B7BAFDC00EC413C /* NumberPadExample.swift */,
 			);
 			path = NumberPad;
+			sourceTree = "<group>";
+		};
+		02B890C22B7CC13F00EC413C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
