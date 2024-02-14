@@ -9,7 +9,6 @@ import SwiftUI
 
 struct KeypadView: View, KeypadButtonDelegate {
     
-    @Binding var textValue: String
     @Binding var value: Double
     @Binding var showSecondaryButtons: Bool
 
@@ -18,10 +17,8 @@ struct KeypadView: View, KeypadButtonDelegate {
     private var secondaryModel: KeypadModel = .mathOperationsKeypad()
     private let textConverter = KeypadViewTextConverter(decimals: 2)
     
-    init(textValue: Binding<String>,
-         value: Binding<Double>,
+    init(value: Binding<Double>,
          showSecondaryButtons: Binding<Bool>) {
-           _textValue = textValue
            _value = value
            _showSecondaryButtons = showSecondaryButtons
     }
@@ -106,14 +103,6 @@ struct KeypadView: View, KeypadButtonDelegate {
     
     private func valueDidChanged(){
         self.value = textConverter.keypadTextToDouble(textInternal) ?? 0
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        numberFormatter.locale = Locale.current
-        if let formattedString = numberFormatter.string(from: NSNumber(value: self.value)) {
-            self.textValue = formattedString
-        } else {
-            self.textValue = "#ERROR#"
-        }
     }
 
 }
@@ -300,8 +289,7 @@ struct ContentView_Previews: PreviewProvider {
             Text("112,53$")
                 .font(.system(size: 40, weight: .medium, design: .rounded))
             Spacer()
-            KeypadView(textValue: .constant(""), 
-                       value: .constant(3.13),
+            KeypadView(value: .constant(3.13),
                        showSecondaryButtons: .constant(true))
                 .frame(maxHeight: 450)
                 .padding()

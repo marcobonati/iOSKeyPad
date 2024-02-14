@@ -22,14 +22,13 @@ struct ContentView: View {
                 Text(amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     .font(.system(size: 40, weight: .medium, design: .rounded))
                 Spacer()
-                KeypadView(
-                    textValue: $amountText, value: $amount,
+                KeypadView(value: $amount,
                            showSecondaryButtons: $showMathOperations)
                     .frame(maxHeight: 380)
                     .padding()
                 Spacer()
                 
-                Text("Amount Text: \(amountText)")
+                Text("Amount Value: \(String(amount))")
                 
                 Toggle(isOn: $showMathOperations.animation()) {
                     Text("Show Math Operations")
