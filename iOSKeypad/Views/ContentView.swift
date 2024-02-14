@@ -67,8 +67,12 @@ struct ContentView: View {
     
     func expressionText()-> String {
         let nonZeroValues = values.filter({ !$0.value.isZero })
-        let strValues = nonZeroValues.map { currencyFormatter.string(from: NSNumber(value:$0.value))! }
-        return strValues.joined(separator: "+ ")
+        let strValues = nonZeroValues.map {
+            let operatorString = $0.operatorType?.rawValue ?? ""
+            let valueString = currencyFormatter.string(from: NSNumber(value: $0.value)) ?? ""
+            return operatorString + " " + valueString
+        }
+        return strValues.joined()
     }
     
     func totalAmount()-> Double {

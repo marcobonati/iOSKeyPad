@@ -10,7 +10,7 @@ import SwiftUI
 struct KeypadView: View, KeypadButtonDelegate {
     @Binding var showSecondaryButtons: Bool
     @Binding var values: [KeypadValueElement]
-
+    
     @State private var internalBuffer: String = ""
     private let textConverter = KeypadViewTextConverter(decimals: 2)
     
@@ -99,9 +99,9 @@ struct KeypadView: View, KeypadButtonDelegate {
                 }
             }
         }
-        .overlay(content: {
-            Text("Internal buffer: \(internalBuffer)").font(.footnote).foregroundStyle(.secondary)
-        })
+//        .overlay(content: {
+//            Text("Internal buffer: \(internalBuffer)").font(.footnote).foregroundStyle(.secondary)
+//        })
     }
     
     func onButtonLongPress(button: KeypadButtonType) {
@@ -150,13 +150,27 @@ struct KeypadView: View, KeypadButtonDelegate {
         valueDidChanged(internalBuffer)
     }
     
-    private func internalBufferFromValue(_ value: Double){
-        let strValue = String(value)
-        
+    private func handleOperatorPressed(_ button: KeypadButtonType) {
+        guard let operatorType = operatorTypeForButton(button) else {
+            return
+        }
+        values.append(.valueElementWithOperator(0, operatorType: operatorType))
+        internalBuffer = ""
     }
     
-    private func handleOperatorPressed(_ button: KeypadButtonType) {
-        commitCurrentValue()
+    private func operatorTypeForButton(_ button: KeypadButtonType)-> KeypadValueOperator? {
+        switch button {
+        case .Operator_Divide:
+            return .Division
+        case .Operator_Multiply:
+            return .Multiplication
+        case .Operator_Plus:
+            return .Addition
+        case .Operator_Minus:
+            return .Subtraction
+        default:
+            return nil
+        }
     }
     
     private func valueDidChanged(_ stringValue: String) {
@@ -166,17 +180,17 @@ struct KeypadView: View, KeypadButtonDelegate {
         values[values.count-1].value = textConverter.keypadTextToDouble(stringValue) ?? 0
     }
 
-    private func commitCurrentValue() {
-        values.append(.valueElement(0))
-        internalBuffer = ""
-    }
+//    private func commitCurrentValue() {
+//        values.append(.valueElement(0))
+//        internalBuffer = ""
+//    }
 }
 
-enum KeypadValueOperator {
-    case Addition
-    case Subtraction
-    case Multiplication
-    case Division
+enum KeypadValueOperator: String {
+    case Addition = "+"
+    case Subtraction = "-"
+    case Multiplication = "x"
+    case Division = "÷"
 }
 
 struct KeypadValueElement: Equatable {
@@ -191,6 +205,11 @@ struct KeypadValueElement: Equatable {
     static func valueElement(_ value: Double)-> KeypadValueElement {
         KeypadValueElement(value: value)
     }
+    
+    static func valueElementWithOperator(_ value: Double, operatorType: KeypadValueOperator)-> KeypadValueElement {
+        KeypadValueElement(value: value, operatorType: operatorType)
+    }
+
 }
 
 private struct KeypadViewTextConverter {
