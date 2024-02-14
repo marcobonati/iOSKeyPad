@@ -67,7 +67,16 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
     
     func onButtonLongPress(button: KeypadButtonType) {
-        //TODO!! handle long press
+        if button == .Accessory_Delete {
+            self.textInternal = ""
+            self.value = 0
+        }
+        
+        if button == .Numeric_00 {
+            withAnimation(.snappy){
+                self.showSecondaryButtons.toggle()
+            }
+        }
     }
 
     func onButtonPressed(button: KeypadButtonType) {
