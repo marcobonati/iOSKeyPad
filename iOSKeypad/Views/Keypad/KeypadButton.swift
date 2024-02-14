@@ -57,7 +57,12 @@ struct KeypadButtonStyle {
 struct KeypadButton: View {
     
     var model: KeypadButtonModel
-    var style: KeypadButtonStyle = KeypadButtonStyle()
+    var style: KeypadButtonStyle
+    
+    init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil){
+        self.model = model
+        self.style = style ?? KeypadButtonStyle()
+    }
     
     var body: some View {
         VStack {
@@ -93,7 +98,7 @@ struct KeypadButton: View {
 }
 
 #Preview {
-    KeypadButton(model: KeypadButtonModel(buttonType: .Numeric_1,  text: "1")).padding(10)
+    KeypadButton(KeypadButtonModel(buttonType: .Numeric_1,  text: "1")).padding(10)
 }
 
 
