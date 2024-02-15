@@ -17,17 +17,25 @@ struct KeypadView: View, KeypadButtonDelegate {
     @State private var internalBuffer: String = ""
     private let textConverter = KeypadViewTextConverter(decimals: 2)
     private let numberFormatter: NumberFormatter
-    
+    private var hapticFeedback: Bool
+    private var clickSound: Bool
+    let softFeedback = UIImpactFeedbackGenerator(style: .soft)
+    let keyboardFeedback = UIImpactFeedbackGenerator(style: .light)
+
     init(values: Binding<[KeypadValueElement]>,
          showSecondaryButtons: Binding<Bool>,
          totalAmount: Binding<Double>,
          expression: Binding<String>,
-         numberFormatter: NumberFormatter? = nil)
+         numberFormatter: NumberFormatter? = nil,
+         hapticFeedback: Bool? = nil,
+         clickSound: Bool? = nil)
     {
         _values = values
         _showSecondaryButtons = showSecondaryButtons
         _totalAmount = totalAmount
         _expression = expression
+        self.hapticFeedback = hapticFeedback ?? true
+        self.clickSound = clickSound ?? true
         self.numberFormatter = numberFormatter ?? KeypadView.defaultCurrencyFormatter()
     }
     
@@ -115,6 +123,7 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
     
     func onButtonLongPress(button: KeypadButtonType) {
+        self.doSoftFeedback()
         if button == .Accessory_Delete {
             internalBuffer = ""
             values[values.count-1].value = 0
@@ -128,6 +137,7 @@ struct KeypadView: View, KeypadButtonDelegate {
     }
 
     func onButtonPressed(button: KeypadButtonType) {
+        self.doKeyboardFeedback()
         debugPrint("onButtonPressed \(button)")
         switch button {
         case .Numeric_00, .Numeric_0, .Numeric_1, .Numeric_2, .Numeric_3, .Numeric_4, .Numeric_5, .Numeric_6, .Numeric_7, .Numeric_8, .Numeric_9:
@@ -230,6 +240,21 @@ struct KeypadView: View, KeypadButtonDelegate {
         }
     }
 
+    private func doSoftFeedback(){
+        if hapticFeedback {
+            softFeedback.impactOccurred()
+        }
+    }
+
+    private func doKeyboardFeedback(){
+        if clickSound {
+            SystemSound.playInputClick()
+        }
+        if hapticFeedback {
+            keyboardFeedback.impactOccurred()
+        }
+    }
+    
 }
 
 enum KeypadValueOperator: String {

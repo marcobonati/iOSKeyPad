@@ -54,12 +54,18 @@ struct KeypadButtonStyle {
     var font: Font = .system(size: 20, weight: .regular, design: .default)
 }
 
+extension UIInputView : UIInputViewAudioFeedback {
+
+    public var enableInputClicksWhenVisible: Bool {
+        return true
+    }
+
+}
+
 struct KeypadButton: View {
     
     var model: KeypadButtonModel
     var style: KeypadButtonStyle
-    let softFeedback = UIImpactFeedbackGenerator(style: .soft)
-    let hardFeedback = UIImpactFeedbackGenerator(style: .heavy)
     
     init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil){
         self.model = model
@@ -87,23 +93,13 @@ struct KeypadButton: View {
                             )
                     )
                     .onTapGesture {
-                        self.hapticHardFeedback()
                         model.delegate?.onButtonPressed(button: model.buttonType)
                     }
                     .onLongPressGesture(minimumDuration: 0.1) {
-                        self.hapticSoftFeedback()
                         model.delegate?.onButtonLongPress(button: model.buttonType)
                     }
             }
         }
-    }
-    
-    private func hapticSoftFeedback(){
-        softFeedback.impactOccurred()
-    }
-
-    private func hapticHardFeedback(){
-        hardFeedback.impactOccurred()
     }
 
 }
