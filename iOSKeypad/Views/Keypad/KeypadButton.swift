@@ -58,6 +58,8 @@ struct KeypadButton: View {
     
     var model: KeypadButtonModel
     var style: KeypadButtonStyle
+    let softFeedback = UIImpactFeedbackGenerator(style: .soft)
+    let hardFeedback = UIImpactFeedbackGenerator(style: .heavy)
     
     init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil){
         self.model = model
@@ -69,32 +71,41 @@ struct KeypadButton: View {
             
             Button(action: {
                 model.delegate?.onButtonPressed(button: model.buttonType)
-                  }) {
+            }) {
+                RoundedRectangle(cornerRadius: style.cornerRadius)
+                    .fill(style.backgroundColor)
+                    .overlay(
                         RoundedRectangle(cornerRadius: style.cornerRadius)
-                          .fill(style.backgroundColor)
-                          .overlay(
-                                RoundedRectangle(cornerRadius: style.cornerRadius)
-                                    .stroke(style.borderColor, lineWidth: style.borderWidth)
-                                    .overlay(
-                                        HStack {
-                                            model.image
-                                            Text(model.text)
-                                                .font(style.font)
-                                                .foregroundColor(style.foregroundColor)
-                                        }
-                                    )
-                          )
-                          .onTapGesture {
-                              model.delegate?.onButtonPressed(button: model.buttonType)
-                          }
-                          .onLongPressGesture(minimumDuration: 0.1) {
-                              model.delegate?.onButtonLongPress(button: model.buttonType)
-                          }
-                  }
-                
+                            .stroke(style.borderColor, lineWidth: style.borderWidth)
+                            .overlay(
+                                HStack {
+                                    model.image
+                                    Text(model.text)
+                                        .font(style.font)
+                                        .foregroundColor(style.foregroundColor)
+                                }
+                            )
+                    )
+                    .onTapGesture {
+                        self.hapticHardFeedback()
+                        model.delegate?.onButtonPressed(button: model.buttonType)
+                    }
+                    .onLongPressGesture(minimumDuration: 0.1) {
+                        self.hapticSoftFeedback()
+                        model.delegate?.onButtonLongPress(button: model.buttonType)
+                    }
+            }
         }
     }
     
+    private func hapticSoftFeedback(){
+        softFeedback.impactOccurred()
+    }
+
+    private func hapticHardFeedback(){
+        hardFeedback.impactOccurred()
+    }
+
 }
 
 #Preview {
