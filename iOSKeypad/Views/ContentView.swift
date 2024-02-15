@@ -14,7 +14,7 @@ struct ContentView: View {
     @State(initialValue: [KeypadValueElement.valueElement(0)]) var values: [KeypadValueElement]
     @State(initialValue: "") var amountText: String
     @State(initialValue: 0) var amount: Double
-    
+    @State(initialValue: "") var expression: String
     @State var showExpression = false
     
     let currencyFormatter = NumberFormatter()
@@ -31,7 +31,7 @@ struct ContentView: View {
             VStack {
                 Spacer()
                 if (showExpression){
-                    Text(expressionText())
+                    Text(expression)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundStyle(.secondary)
@@ -43,7 +43,9 @@ struct ContentView: View {
                 
                 Spacer()
                 KeypadView(values: $values,
-                           showSecondaryButtons: $showMathOperations)
+                           showSecondaryButtons: $showMathOperations,
+                           totalAmount: $amount,
+                           expression: $expression)
                     .frame(maxHeight: 380)
                     .padding()
                 Spacer()
@@ -61,25 +63,25 @@ struct ContentView: View {
                     showExpression = true
                 }
             }
-            self.amount = totalAmount()
+            //self.amount = totalAmount()
         }
     }
     
-    func expressionText()-> String {
-        let nonZeroValues = values.filter({ !$0.value.isZero })
-        let strValues = nonZeroValues.map {
-            let operatorString = $0.operatorType?.rawValue ?? ""
-            let valueString = currencyFormatter.string(from: NSNumber(value: $0.value)) ?? ""
-            return operatorString + " " + valueString
-        }
-        return strValues.joined()
-    }
-    
-    func totalAmount()-> Double {
-        return values.reduce(0) { (result, item) in
-            return result + item.value
-        }
-    }
+//    func expressionText()-> String {
+//        let nonZeroValues = values.filter({ !$0.value.isZero })
+//        let strValues = nonZeroValues.map {
+//            let operatorString = $0.operatorType?.rawValue ?? ""
+//            let valueString = currencyFormatter.string(from: NSNumber(value: $0.value)) ?? ""
+//            return operatorString + " " + valueString
+//        }
+//        return strValues.joined()
+//    }
+//    
+//    func totalAmount()-> Double {
+//        return values.reduce(0) { (result, item) in
+//            return result + item.value
+//        }
+//    }
     
 }
 

@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct KeypadView: View, KeypadButtonDelegate {
+    
     @Binding var showSecondaryButtons: Bool
     @Binding var values: [KeypadValueElement]
+    @Binding var expression: String
+    @Binding var totalAmount: Double
     
     @State private var internalBuffer: String = ""
     private let textConverter = KeypadViewTextConverter(decimals: 2)
+    private let numberFormatter: NumberFormatter
     
     init(values: Binding<[KeypadValueElement]>,
-         showSecondaryButtons: Binding<Bool>)
+         showSecondaryButtons: Binding<Bool>,
+         totalAmount: Binding<Double>,
+         expression: Binding<String>,
+         numberFormatter: NumberFormatter? = nil)
     {
         _values = values
         _showSecondaryButtons = showSecondaryButtons
+        _totalAmount = totalAmount
+        _expression = expression
+        self.numberFormatter = numberFormatter ?? KeypadView.defaultCurrencyFormatter()
     }
     
     public var body: some View {
@@ -178,8 +188,39 @@ struct KeypadView: View, KeypadButtonDelegate {
             values.append(.valueElement(0))
         }
         values[values.count-1].value = textConverter.keypadTextToDouble(stringValue) ?? 0
+        updateComputedValues()
     }
 
+    private func updateComputedValues(){
+        self.totalAmount = computeTotalAmount()
+        self.expression = makeExpressionText()
+    }
+    
+    public static func defaultCurrencyFormatter()-> NumberFormatter {
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = Locale.current
+        currencyFormatter.currencySymbol = ""
+        return currencyFormatter
+    }
+    
+    private func makeExpressionText()-> String {
+        let nonZeroValues = values.filter({ !$0.value.isZero })
+        let strValues = nonZeroValues.map {
+            let operatorString = $0.operatorType?.rawValue ?? ""
+            let valueString = numberFormatter.string(from: NSNumber(value: $0.value)) ?? ""
+            return operatorString + " " + valueString
+        }
+        return strValues.joined()
+    }
+    
+    private func computeTotalAmount()-> Double {
+        return values.reduce(0) { (result, item) in
+            return result + item.value
+        }
+    }
+
+    
 //    private func commitCurrentValue() {
 //        values.append(.valueElement(0))
 //        internalBuffer = ""
