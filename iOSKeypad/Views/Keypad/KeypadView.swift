@@ -216,15 +216,20 @@ struct KeypadView: View, KeypadButtonDelegate {
     
     private func computeTotalAmount()-> Double {
         return values.reduce(0) { (result, item) in
-            return result + item.value
+            if (item.operatorType == nil){
+                return result + item.value
+            }
+            switch item.operatorType {
+            case .Addition:
+                return result + item.value
+            case .Subtraction:
+                return result - item.value
+            default:
+                return result
+            }
         }
     }
 
-    
-//    private func commitCurrentValue() {
-//        values.append(.valueElement(0))
-//        internalBuffer = ""
-//    }
 }
 
 enum KeypadValueOperator: String {
