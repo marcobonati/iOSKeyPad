@@ -1,13 +1,12 @@
 //
-//  KeypadViews.swift
-//  iOSKeypadTest
+//  KeypadView.swift
 //
 //  Created by Marco Bonati on 13/02/24.
 //
 
 import SwiftUI
 
-struct KeypadView: View, KeypadButtonDelegate {
+public struct KeypadView: View, KeypadButtonDelegate {
     
     @Binding var showSecondaryButtons: Bool
     @Binding var values: [KeypadValueElement]
@@ -22,7 +21,7 @@ struct KeypadView: View, KeypadButtonDelegate {
     let softFeedback = UIImpactFeedbackGenerator(style: .soft)
     let keyboardFeedback = UIImpactFeedbackGenerator(style: .light)
 
-    init(values: Binding<[KeypadValueElement]>,
+    public init(values: Binding<[KeypadValueElement]>,
          showSecondaryButtons: Binding<Bool>,
          totalAmount: Binding<Double>,
          expression: Binding<String>,
@@ -127,6 +126,7 @@ struct KeypadView: View, KeypadButtonDelegate {
         if button == .Accessory_Delete {
             internalBuffer = ""
             values[values.count-1].value = 0
+            valueDidChanged(internalBuffer)
         }
         
         if button == .Numeric_00 {
@@ -257,27 +257,27 @@ struct KeypadView: View, KeypadButtonDelegate {
     
 }
 
-enum KeypadValueOperator: String {
+public enum KeypadValueOperator: String {
     case Addition = "+"
     case Subtraction = "-"
     case Multiplication = "x"
     case Division = "÷"
 }
 
-struct KeypadValueElement: Equatable {
+public struct KeypadValueElement: Equatable {
     var value: Double
     var operatorType: KeypadValueOperator?
     
-    static func ==(lhs: KeypadValueElement, rhs: KeypadValueElement) -> Bool {
+    public static func ==(lhs: KeypadValueElement, rhs: KeypadValueElement) -> Bool {
         return lhs.value == rhs.value &&
             lhs.operatorType == rhs.operatorType
     }
     
-    static func valueElement(_ value: Double)-> KeypadValueElement {
+    public  static func valueElement(_ value: Double)-> KeypadValueElement {
         KeypadValueElement(value: value)
     }
     
-    static func valueElementWithOperator(_ value: Double, operatorType: KeypadValueOperator)-> KeypadValueElement {
+    public static func valueElementWithOperator(_ value: Double, operatorType: KeypadValueOperator)-> KeypadValueElement {
         KeypadValueElement(value: value, operatorType: operatorType)
     }
 
