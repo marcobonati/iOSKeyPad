@@ -9,6 +9,7 @@ import SwiftUI
 
 protocol KeypadButtonDelegate {
     func onButtonPressed(button: KeypadButtonType)
+    func onButtonLongPress(button: KeypadButtonType)
 }
 
 public enum KeypadButtonType: String {
@@ -53,40 +54,58 @@ struct KeypadButtonStyle {
     var font: Font = .system(size: 20, weight: .regular, design: .default)
 }
 
+extension UIInputView : UIInputViewAudioFeedback {
+
+    public var enableInputClicksWhenVisible: Bool {
+        return true
+    }
+
+}
+
 struct KeypadButton: View {
     
     var model: KeypadButtonModel
-    var style: KeypadButtonStyle = KeypadButtonStyle()
+    var style: KeypadButtonStyle
+    
+    init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil){
+        self.model = model
+        self.style = style ?? KeypadButtonStyle()
+    }
     
     var body: some View {
         VStack {
             
             Button(action: {
                 model.delegate?.onButtonPressed(button: model.buttonType)
-                  }) {
+            }) {
+                RoundedRectangle(cornerRadius: style.cornerRadius)
+                    .fill(style.backgroundColor)
+                    .overlay(
                         RoundedRectangle(cornerRadius: style.cornerRadius)
-                          .fill(style.backgroundColor)
-                          .overlay(
-                                RoundedRectangle(cornerRadius: style.cornerRadius)
-                                    .stroke(style.borderColor, lineWidth: style.borderWidth)
-                                    .overlay(
-                                        HStack {
-                                            model.image
-                                            Text(model.text)
-                                                .font(style.font)
-                                                .foregroundColor(style.foregroundColor)
-                                        }
-                                    )
-                          )
-                  }
-                
+                            .stroke(style.borderColor, lineWidth: style.borderWidth)
+                            .overlay(
+                                HStack {
+                                    model.image
+                                    Text(model.text)
+                                        .font(style.font)
+                                        .foregroundColor(style.foregroundColor)
+                                }
+                            )
+                    )
+                    .onTapGesture {
+                        model.delegate?.onButtonPressed(button: model.buttonType)
+                    }
+                    .onLongPressGesture(minimumDuration: 0.1) {
+                        model.delegate?.onButtonLongPress(button: model.buttonType)
+                    }
+            }
         }
     }
-    
+
 }
 
 #Preview {
-    KeypadButton(model: KeypadButtonModel(buttonType: .Numeric_1,  text: "1")).padding(10)
+    KeypadButton(KeypadButtonModel(buttonType: .Numeric_1,  text: "1")).padding(10)
 }
 
 

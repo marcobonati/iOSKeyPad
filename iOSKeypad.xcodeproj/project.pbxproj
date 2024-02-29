@@ -29,6 +29,7 @@
 		02B890BD2B7BAFDC00EC413C /* NumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B62B7BAFDC00EC413C /* NumberPad.swift */; };
 		02B890BE2B7BAFDC00EC413C /* NPFloatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B72B7BAFDC00EC413C /* NPFloatConfig.swift */; };
 		02B890C02B7BEAA600EC413C /* Veil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890BF2B7BEAA600EC413C /* Veil.swift */; };
+		02B890C92B7E110000EC413C /* SystemSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890C82B7E110000EC413C /* SystemSound.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 		02B890B62B7BAFDC00EC413C /* NumberPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPad.swift; sourceTree = "<group>"; };
 		02B890B72B7BAFDC00EC413C /* NPFloatConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPFloatConfig.swift; sourceTree = "<group>"; };
 		02B890BF2B7BEAA600EC413C /* Veil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Veil.swift; sourceTree = "<group>"; };
+		02B890C72B7E0B6A00EC413C /* iOSKeypadTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "iOSKeypadTest-Info.plist"; sourceTree = "<group>"; };
+		02B890C82B7E110000EC413C /* SystemSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSound.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +108,12 @@
 		02B890682B7BA4BB00EC413C = {
 			isa = PBXGroup;
 			children = (
+				02B890C72B7E0B6A00EC413C /* iOSKeypadTest-Info.plist */,
 				02B890732B7BA4BC00EC413C /* iOSKeypad */,
 				02B890852B7BA4C500EC413C /* iOSKeypadTestTests */,
 				02B8908F2B7BA4C500EC413C /* iOSKeypadTestUITests */,
 				02B890722B7BA4BC00EC413C /* Products */,
+				02B890C22B7CC13F00EC413C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -179,6 +184,7 @@
 			children = (
 				02B890A52B7BA60200EC413C /* KeypadView.swift */,
 				02B890AE2B7BA6AE00EC413C /* KeypadButton.swift */,
+				02B890C82B7E110000EC413C /* SystemSound.swift */,
 			);
 			path = Keypad;
 			sourceTree = "<group>";
@@ -195,6 +201,13 @@
 				02B890B52B7BAFDC00EC413C /* NumberPadExample.swift */,
 			);
 			path = NumberPad;
+			sourceTree = "<group>";
+		};
+		02B890C22B7CC13F00EC413C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,6 +352,7 @@
 				02B890A32B7BA5DF00EC413C /* ColorView.swift in Sources */,
 				02B890772B7BA4BC00EC413C /* ContentView.swift in Sources */,
 				02B890C02B7BEAA600EC413C /* Veil.swift in Sources */,
+				02B890C92B7E110000EC413C /* SystemSound.swift in Sources */,
 				02B890AA2B7BA64A00EC413C /* Helpers.swift in Sources */,
 				02B890BA2B7BAFDC00EC413C /* NPDecimalConfig.swift in Sources */,
 				02B890B92B7BAFDC00EC413C /* NPIntegerConfig.swift in Sources */,
@@ -512,6 +526,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOSKeypadTest-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -550,6 +565,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOSKeypadTest-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
