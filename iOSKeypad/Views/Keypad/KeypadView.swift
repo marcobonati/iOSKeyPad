@@ -7,7 +7,6 @@
 import SwiftUI
 
 public struct KeypadView: View, KeypadButtonDelegate {
-    
     @Binding var showSecondaryButtons: Bool
     @Binding var values: [KeypadValueElement]
     @Binding var expression: String
@@ -18,21 +17,26 @@ public struct KeypadView: View, KeypadButtonDelegate {
     private let numberFormatter: NumberFormatter
     private var hapticFeedback: Bool
     private var clickSound: Bool
+    private var style: KeypadStyle?
+    private var numberButtonStyle: KeypadButtonStyle?
     let softFeedback = UIImpactFeedbackGenerator(style: .soft)
     let keyboardFeedback = UIImpactFeedbackGenerator(style: .light)
 
     public init(values: Binding<[KeypadValueElement]>,
-         showSecondaryButtons: Binding<Bool>,
-         totalAmount: Binding<Double>,
-         expression: Binding<String>,
-         numberFormatter: NumberFormatter? = nil,
-         hapticFeedback: Bool? = nil,
-         clickSound: Bool? = nil)
+                showSecondaryButtons: Binding<Bool>,
+                totalAmount: Binding<Double>,
+                expression: Binding<String>,
+                style: KeypadStyle? = nil,
+                numberFormatter: NumberFormatter? = nil,
+                hapticFeedback: Bool? = nil,
+                clickSound: Bool? = nil)
     {
         _values = values
         _showSecondaryButtons = showSecondaryButtons
         _totalAmount = totalAmount
         _expression = expression
+        self.style = style
+        self.numberButtonStyle = style?.numberButtonStyle
         self.hapticFeedback = hapticFeedback ?? true
         self.clickSound = clickSound ?? true
         self.numberFormatter = numberFormatter ?? KeypadView.defaultCurrencyFormatter()
@@ -44,89 +48,87 @@ public struct KeypadView: View, KeypadButtonDelegate {
                 HStack {
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_1,
                                                    delegate: self,
-                                                   text: "1"))
+                                                   text: "1"),
+                                 style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_2,
                                                    delegate: self,
-                                                   text: "2"))
+                                                   text: "2"),
+                                 style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_3,
                                                    delegate: self,
-                                                   text: "3"))
+                                                   text: "3"),
+                                 style: numberButtonStyle)
                     if showSecondaryButtons {
-                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Divide,
+                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Addition,
                                                        delegate: self,
-                                                       text: "",
-                                                       image: Image(systemName: "divide"))
-                        )
+                                                       text: "+"),
+                                     style: numberButtonStyle)
                     }
                 }
                 HStack {
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_4,
                                                    delegate: self,
-                                                   text: "4"))
+                                                   text: "4"),
+                                 style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_5,
                                                    delegate: self,
-                                                   text: "5"))
+                                                   text: "5"),
+                                 style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_6,
                                                    delegate: self,
-                                                   text: "6"))
+                                                   text: "6"),
+                                 style: numberButtonStyle)
                     if showSecondaryButtons {
-                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Multiply,
+                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Subtraction,
                                                        delegate: self,
-                                                       text: "",
-                                                       image: Image(systemName: "multiply"))
-                        )
+                                                       text: "-"),
+                                     style: numberButtonStyle)
                     }
                 }
                 HStack {
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_7,
                                                    delegate: self,
-                                                   text: "7"))
+                                                   text: "7"), style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_8,
                                                    delegate: self,
-                                                   text: "8"))
+                                                   text: "8"), style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_9,
                                                    delegate: self,
-                                                   text: "9"))
+                                                   text: "9"),
+                                 style: numberButtonStyle)
                     if showSecondaryButtons {
-                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Minus,
+                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Equals,
                                                        delegate: self,
-                                                       text: "",
-                                                       image: Image(systemName: "minus"))
-                        )
+                                                       text: "="),
+                                     style: numberButtonStyle)
                     }
                 }
                 HStack {
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_00,
                                                    delegate: self,
-                                                   text: "00"))
+                                                   text: "00"), style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Numeric_0,
                                                    delegate: self,
-                                                   text: "0"))
+                                                   text: "0"), style: numberButtonStyle)
                     KeypadButton(KeypadButtonModel(buttonType: .Accessory_Delete,
                                                    delegate: self,
                                                    text: "",
-                                                   image: Image(systemName: "delete.left.fill")))
+                                                   image: Image(systemName: "delete.left.fill")), style: numberButtonStyle)
                     if showSecondaryButtons {
-                        KeypadButton(KeypadButtonModel(buttonType: .Operator_Plus,
+                        KeypadButton(KeypadButtonModel(buttonType: .Accessory_Clear,
                                                        delegate: self,
-                                                       text: "",
-                                                       image: Image(systemName: "plus"))
-                        )
+                                                       text: "C"),
+                                     style: numberButtonStyle)
                     }
                 }
             }
         }
-//        .overlay(content: {
-//            Text("Internal buffer: \(internalBuffer)").font(.footnote).foregroundStyle(.secondary)
-//        })
     }
     
     func onButtonLongPress(button: KeypadButtonType) {
-        self.doSoftFeedback()
+        doSoftFeedback()
         if button == .Accessory_Delete {
-            internalBuffer = ""
-            values[values.count-1].value = 0
-            valueDidChanged(internalBuffer)
+            clearLast()
         }
         
         if button == .Numeric_00 {
@@ -137,16 +139,24 @@ public struct KeypadView: View, KeypadButtonDelegate {
     }
 
     func onButtonPressed(button: KeypadButtonType) {
-        self.doKeyboardFeedback()
-        debugPrint("onButtonPressed \(button)")
+        doKeyboardFeedback()
         switch button {
         case .Numeric_00, .Numeric_0, .Numeric_1, .Numeric_2, .Numeric_3, .Numeric_4, .Numeric_5, .Numeric_6, .Numeric_7, .Numeric_8, .Numeric_9:
             handleNumericPressed(button)
+        case .Accessory_Clear:
+            handleClearPressed(button)
         case .Accessory_Delete:
             handleDeletePressed(button)
-        case .Operator_Plus, .Operator_Minus, .Operator_Divide, .Operator_Multiply:
+        case .Operator_Addition, .Operator_Subtraction:
             handleOperatorPressed(button)
+        case .Operator_Equals:
+            handleEqualsOperatorPressed(button)
         }
+    }
+
+    
+    private func handleClearPressed(_ button: KeypadButtonType) {
+        clearAll()
     }
     
     private func handleNumericPressed(_ button: KeypadButtonType) {
@@ -158,14 +168,14 @@ public struct KeypadView: View, KeypadButtonDelegate {
     }
 
     private func handleDeletePressed(_ button: KeypadButtonType) {
-        if (internalBuffer.isEmpty && self.values.count <= 1){
+        if internalBuffer.isEmpty && values.count <= 1 {
             return
         }
         if !internalBuffer.isEmpty {
             internalBuffer.removeLast()
         } else {
-            self.values.removeLast()
-            self.internalBuffer = textConverter.keypadBufferTextFromDouble(self.values[self.values.count-1].value)
+            values.removeLast()
+            internalBuffer = textConverter.keypadBufferTextFromDouble(values[values.count-1].value)
         }
         valueDidChanged(internalBuffer)
     }
@@ -176,17 +186,23 @@ public struct KeypadView: View, KeypadButtonDelegate {
         }
         values.append(.valueElementWithOperator(0, operatorType: operatorType))
         internalBuffer = ""
+        valueDidChanged(internalBuffer)
     }
     
-    private func operatorTypeForButton(_ button: KeypadButtonType)-> KeypadValueOperator? {
+    private func handleEqualsOperatorPressed(_ button: KeypadButtonType) {
+        let tempAmount = computeTotalAmount()
+        values = []
+        internalBuffer = textConverter.keypadBufferTextFromDouble(tempAmount)
+        valueDidChanged(internalBuffer)
+    }
+    
+    private func operatorTypeForButton(_ button: KeypadButtonType) -> KeypadValueOperator? {
         switch button {
-        case .Operator_Divide:
-            return .Division
-        case .Operator_Multiply:
-            return .Multiplication
-        case .Operator_Plus:
+        case .Operator_Equals:
+            return .Equals
+        case .Operator_Addition:
             return .Addition
-        case .Operator_Minus:
+        case .Operator_Subtraction:
             return .Subtraction
         default:
             return nil
@@ -201,12 +217,25 @@ public struct KeypadView: View, KeypadButtonDelegate {
         updateComputedValues()
     }
 
-    private func updateComputedValues(){
-        self.totalAmount = computeTotalAmount()
-        self.expression = makeExpressionText()
+    private func updateComputedValues() {
+        totalAmount = computeTotalAmount()
+        expression = makeExpressionText()
     }
     
-    public static func defaultCurrencyFormatter()-> NumberFormatter {
+    private func clearLast(){
+        internalBuffer = ""
+        values[values.count-1].value = 0
+        valueDidChanged(internalBuffer)
+
+    }
+    
+    private func clearAll(){
+        internalBuffer = ""
+        values = []
+        valueDidChanged(internalBuffer)
+    }
+    
+    public static func defaultCurrencyFormatter() -> NumberFormatter {
         let currencyFormatter = NumberFormatter()
         currencyFormatter.numberStyle = .currency
         currencyFormatter.locale = Locale.current
@@ -214,8 +243,8 @@ public struct KeypadView: View, KeypadButtonDelegate {
         return currencyFormatter
     }
     
-    private func makeExpressionText()-> String {
-        let nonZeroValues = values.filter({ !$0.value.isZero })
+    private func makeExpressionText() -> String {
+        let nonZeroValues = values.filter { !$0.value.isZero }
         let strValues = nonZeroValues.map {
             let operatorString = $0.operatorType?.rawValue ?? ""
             let valueString = numberFormatter.string(from: NSNumber(value: $0.value)) ?? ""
@@ -224,29 +253,29 @@ public struct KeypadView: View, KeypadButtonDelegate {
         return strValues.joined()
     }
     
-    private func computeTotalAmount()-> Double {
-        return values.reduce(0) { (result, item) in
-            if (item.operatorType == nil){
+    private func computeTotalAmount() -> Double {
+        return values.reduce(0) { result, item in
+            if item.operatorType == nil {
                 return result + item.value
             }
             switch item.operatorType {
             case .Addition:
                 return result + item.value
             case .Subtraction:
-                return result - item.value
+                return result-item.value
             default:
                 return result
             }
         }
     }
 
-    private func doSoftFeedback(){
+    private func doSoftFeedback() {
         if hapticFeedback {
             softFeedback.impactOccurred()
         }
     }
 
-    private func doKeyboardFeedback(){
+    private func doKeyboardFeedback() {
         if clickSound {
             SystemSound.playInputClick()
         }
@@ -254,14 +283,12 @@ public struct KeypadView: View, KeypadButtonDelegate {
             keyboardFeedback.impactOccurred()
         }
     }
-    
 }
 
 public enum KeypadValueOperator: String {
     case Addition = "+"
     case Subtraction = "-"
-    case Multiplication = "x"
-    case Division = "÷"
+    case Equals = "="
 }
 
 public struct KeypadValueElement: Equatable {
@@ -273,14 +300,13 @@ public struct KeypadValueElement: Equatable {
             lhs.operatorType == rhs.operatorType
     }
     
-    public  static func valueElement(_ value: Double)-> KeypadValueElement {
+    public static func valueElement(_ value: Double) -> KeypadValueElement {
         KeypadValueElement(value: value)
     }
     
-    public static func valueElementWithOperator(_ value: Double, operatorType: KeypadValueOperator)-> KeypadValueElement {
+    public static func valueElementWithOperator(_ value: Double, operatorType: KeypadValueOperator) -> KeypadValueElement {
         KeypadValueElement(value: value, operatorType: operatorType)
     }
-
 }
 
 private struct KeypadViewTextConverter {
@@ -323,30 +349,40 @@ private struct KeypadViewTextConverter {
         }
     }
     
-    func keypadBufferTextFromDouble(_ value: Double)-> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .none
-        if let formattedString = numberFormatter.string(from: NSNumber(value: value)) {
-            return formattedString
-        } else {
-            return ""
-        }
+//    func keypadBufferTextFromDoubleX(_ value: Double) -> String {
+//        let numberFormatter = NumberFormatter()
+//        if let formattedString = numberFormatter.string(from: NSNumber(value: value)) {
+//            return formattedString
+//        } else {
+//            return ""
+//        }
+//    }
+    
+    func keypadBufferTextFromDouble(_ value: Double) -> String {
+        let multiplier = Int(pow(10.0, Double(self.decimals)))
+        let valueTemp = Double(multiplier) * value
+        return value > 0 ? String(Int(valueTemp)) : ""
     }
+    
     
 }
 
-// struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VStack {
-//            Spacer()
-//            Text("112,53$")
-//                .font(.system(size: 40, weight: .medium, design: .rounded))
-//            Spacer()
-//            KeypadView(value: [3.13],
-//                       showSecondaryButtons: .constant(true))
-//                .frame(maxHeight: 450)
-//                .padding()
-//            Spacer()
-//        }
-//    }
-// }
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            Spacer()
+            Text("112,53$")
+                .font(.system(size: 40, weight: .medium, design: .rounded))
+            Spacer()
+            KeypadView(
+                values: .constant([KeypadValueElement(value: 3.35)]),
+                showSecondaryButtons: .constant(true),
+                totalAmount: .constant(0),
+                expression: .constant(""),
+                style: KeypadStyle.DefaultKeypadStyle)
+                .frame(maxHeight: 450)
+                .padding()
+            Spacer()
+        }
+    }
+}

@@ -24,6 +24,9 @@ struct ContentView: View {
         currencyFormatter.currencySymbol = ""
     }
     
+    let keypadStyle = KeypadStyle(numberButtonStyle: KeypadStyle.MaterialKeypabButtonStyle, deleteButtonImage: Image(.backspace))
+    
+    
     var body: some View {
         VStack {
         
@@ -57,10 +60,8 @@ struct ContentView: View {
         }
         .padding()
         .onChange(of: values) { _ in
-            if (values.count > 1){
-                withAnimation(.spring){
-                    showExpression = true
-                }
+            withAnimation(.spring) {
+                showExpression = values.count > 1 ? true : false
             }
         }
     }

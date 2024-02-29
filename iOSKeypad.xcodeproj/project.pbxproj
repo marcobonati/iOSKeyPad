@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02220CAD2B90CFC700B5706C /* KeypadStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02220CAC2B90CFC700B5706C /* KeypadStyle.swift */; };
 		02B890752B7BA4BC00EC413C /* iOSKeypadTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890742B7BA4BC00EC413C /* iOSKeypadTestApp.swift */; };
 		02B890772B7BA4BC00EC413C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890762B7BA4BC00EC413C /* ContentView.swift */; };
 		02B890792B7BA4C400EC413C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B890782B7BA4C400EC413C /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02220CAC2B90CFC700B5706C /* KeypadStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadStyle.swift; sourceTree = "<group>"; };
 		02B890712B7BA4BC00EC413C /* iOSKeypadTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSKeypadTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B890742B7BA4BC00EC413C /* iOSKeypadTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSKeypadTestApp.swift; sourceTree = "<group>"; };
 		02B890762B7BA4BC00EC413C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				02B890A52B7BA60200EC413C /* KeypadView.swift */,
 				02B890AE2B7BA6AE00EC413C /* KeypadButton.swift */,
 				02B890C82B7E110000EC413C /* SystemSound.swift */,
+				02220CAC2B90CFC700B5706C /* KeypadStyle.swift */,
 			);
 			path = Keypad;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				02B890AC2B7BA64A00EC413C /* Color+hex.swift in Sources */,
 				02B890AF2B7BA6AE00EC413C /* KeypadButton.swift in Sources */,
 				02B890BE2B7BAFDC00EC413C /* NPFloatConfig.swift in Sources */,
+				02220CAD2B90CFC700B5706C /* KeypadStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
