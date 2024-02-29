@@ -24,10 +24,10 @@ public enum KeypadButtonType: String {
     case Numeric_7 = "7"
     case Numeric_8 = "8"
     case Numeric_9 = "9"
-    case Operator_Plus = "+"
-    case Operator_Minus = "-"
-    case Operator_Divide = "/"
-    case Operator_Multiply = "*"
+    case Operator_Addition = "+"
+    case Operator_Subtraction = "-"
+    case Operator_Equals = "="
+    case Accessory_Clear = "CLEAR"
     case Accessory_Delete = "DEL"
 }
 
@@ -45,13 +45,13 @@ struct KeypadButtonModel: Hashable {
     }
 }
 
-struct KeypadButtonStyle {
+public struct KeypadButtonStyle {
     var backgroundColor: Color = Color(UIColor(red: 248/255, green: 248/255, blue: 249/255, alpha: 1))
     var foregroundColor: Color = .black
     var borderColor: Color = .clear //Color(UIColor(red: 211/255, green: 213/255, blue: 215/255, alpha: 1))
     var borderWidth: CGFloat = 1
     var cornerRadius: CGFloat = 20
-    var font: Font = .system(size: 20, weight: .regular, design: .default)
+    var font: Font = .system(size: 22, weight: .regular, design: .default)
 }
 
 extension UIInputView : UIInputViewAudioFeedback {
