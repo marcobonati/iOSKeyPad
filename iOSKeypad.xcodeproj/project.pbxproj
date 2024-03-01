@@ -22,13 +22,6 @@
 		02B890AB2B7BA64A00EC413C /* Color+brightness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890A82B7BA64900EC413C /* Color+brightness.swift */; };
 		02B890AC2B7BA64A00EC413C /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890A92B7BA64900EC413C /* Color+hex.swift */; };
 		02B890AF2B7BA6AE00EC413C /* KeypadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890AE2B7BA6AE00EC413C /* KeypadButton.swift */; };
-		02B890B82B7BAFDC00EC413C /* NPBaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B12B7BAFDC00EC413C /* NPBaseConfig.swift */; };
-		02B890B92B7BAFDC00EC413C /* NPIntegerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B22B7BAFDC00EC413C /* NPIntegerConfig.swift */; };
-		02B890BA2B7BAFDC00EC413C /* NPDecimalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B32B7BAFDC00EC413C /* NPDecimalConfig.swift */; };
-		02B890BB2B7BAFDC00EC413C /* NumberPadEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B42B7BAFDC00EC413C /* NumberPadEnum.swift */; };
-		02B890BC2B7BAFDC00EC413C /* NumberPadExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B52B7BAFDC00EC413C /* NumberPadExample.swift */; };
-		02B890BD2B7BAFDC00EC413C /* NumberPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B62B7BAFDC00EC413C /* NumberPad.swift */; };
-		02B890BE2B7BAFDC00EC413C /* NPFloatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890B72B7BAFDC00EC413C /* NPFloatConfig.swift */; };
 		02B890C02B7BEAA600EC413C /* Veil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890BF2B7BEAA600EC413C /* Veil.swift */; };
 		02B890C92B7E110000EC413C /* SystemSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890C82B7E110000EC413C /* SystemSound.swift */; };
 /* End PBXBuildFile section */
@@ -69,13 +62,6 @@
 		02B890A82B7BA64900EC413C /* Color+brightness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+brightness.swift"; sourceTree = "<group>"; };
 		02B890A92B7BA64900EC413C /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
 		02B890AE2B7BA6AE00EC413C /* KeypadButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadButton.swift; sourceTree = "<group>"; };
-		02B890B12B7BAFDC00EC413C /* NPBaseConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPBaseConfig.swift; sourceTree = "<group>"; };
-		02B890B22B7BAFDC00EC413C /* NPIntegerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPIntegerConfig.swift; sourceTree = "<group>"; };
-		02B890B32B7BAFDC00EC413C /* NPDecimalConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPDecimalConfig.swift; sourceTree = "<group>"; };
-		02B890B42B7BAFDC00EC413C /* NumberPadEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPadEnum.swift; sourceTree = "<group>"; };
-		02B890B52B7BAFDC00EC413C /* NumberPadExample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPadExample.swift; sourceTree = "<group>"; };
-		02B890B62B7BAFDC00EC413C /* NumberPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPad.swift; sourceTree = "<group>"; };
-		02B890B72B7BAFDC00EC413C /* NPFloatConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPFloatConfig.swift; sourceTree = "<group>"; };
 		02B890BF2B7BEAA600EC413C /* Veil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Veil.swift; sourceTree = "<group>"; };
 		02B890C72B7E0B6A00EC413C /* iOSKeypadTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "iOSKeypadTest-Info.plist"; sourceTree = "<group>"; };
 		02B890C82B7E110000EC413C /* SystemSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSound.swift; sourceTree = "<group>"; };
@@ -107,6 +93,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02220CAE2B91D3BC00B5706C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				02B890A82B7BA64900EC413C /* Color+brightness.swift */,
+				02B890A92B7BA64900EC413C /* Color+hex.swift */,
+				02B890A72B7BA64900EC413C /* Helpers.swift */,
+				02B890AD2B7BA69E00EC413C /* Keypad */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		02B890682B7BA4BB00EC413C = {
 			isa = PBXGroup;
 			children = (
@@ -132,9 +129,7 @@
 		02B890732B7BA4BC00EC413C /* iOSKeypad */ = {
 			isa = PBXGroup;
 			children = (
-				02B890A82B7BA64900EC413C /* Color+brightness.swift */,
-				02B890A92B7BA64900EC413C /* Color+hex.swift */,
-				02B890A72B7BA64900EC413C /* Helpers.swift */,
+				02220CAE2B91D3BC00B5706C /* Components */,
 				02B890A42B7BA5E200EC413C /* Views */,
 				02B890742B7BA4BC00EC413C /* iOSKeypadTestApp.swift */,
 				02B890782B7BA4C400EC413C /* Assets.xcassets */,
@@ -173,10 +168,8 @@
 		02B890A42B7BA5E200EC413C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				02B890B02B7BAFCE00EC413C /* NumberPad */,
 				02B890762B7BA4BC00EC413C /* ContentView.swift */,
 				02B890A22B7BA5DF00EC413C /* ColorView.swift */,
-				02B890AD2B7BA69E00EC413C /* Keypad */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -190,20 +183,6 @@
 				02220CAC2B90CFC700B5706C /* KeypadStyle.swift */,
 			);
 			path = Keypad;
-			sourceTree = "<group>";
-		};
-		02B890B02B7BAFCE00EC413C /* NumberPad */ = {
-			isa = PBXGroup;
-			children = (
-				02B890B12B7BAFDC00EC413C /* NPBaseConfig.swift */,
-				02B890B32B7BAFDC00EC413C /* NPDecimalConfig.swift */,
-				02B890B72B7BAFDC00EC413C /* NPFloatConfig.swift */,
-				02B890B22B7BAFDC00EC413C /* NPIntegerConfig.swift */,
-				02B890B62B7BAFDC00EC413C /* NumberPad.swift */,
-				02B890B42B7BAFDC00EC413C /* NumberPadEnum.swift */,
-				02B890B52B7BAFDC00EC413C /* NumberPadExample.swift */,
-			);
-			path = NumberPad;
 			sourceTree = "<group>";
 		};
 		02B890C22B7CC13F00EC413C /* Frameworks */ = {
@@ -351,21 +330,14 @@
 			files = (
 				02B890AB2B7BA64A00EC413C /* Color+brightness.swift in Sources */,
 				02B890A62B7BA60200EC413C /* KeypadView.swift in Sources */,
-				02B890B82B7BAFDC00EC413C /* NPBaseConfig.swift in Sources */,
 				02B890A32B7BA5DF00EC413C /* ColorView.swift in Sources */,
 				02B890772B7BA4BC00EC413C /* ContentView.swift in Sources */,
 				02B890C02B7BEAA600EC413C /* Veil.swift in Sources */,
 				02B890C92B7E110000EC413C /* SystemSound.swift in Sources */,
 				02B890AA2B7BA64A00EC413C /* Helpers.swift in Sources */,
-				02B890BA2B7BAFDC00EC413C /* NPDecimalConfig.swift in Sources */,
-				02B890B92B7BAFDC00EC413C /* NPIntegerConfig.swift in Sources */,
-				02B890BD2B7BAFDC00EC413C /* NumberPad.swift in Sources */,
 				02B890752B7BA4BC00EC413C /* iOSKeypadTestApp.swift in Sources */,
-				02B890BC2B7BAFDC00EC413C /* NumberPadExample.swift in Sources */,
-				02B890BB2B7BAFDC00EC413C /* NumberPadEnum.swift in Sources */,
 				02B890AC2B7BA64A00EC413C /* Color+hex.swift in Sources */,
 				02B890AF2B7BA6AE00EC413C /* KeypadButton.swift in Sources */,
-				02B890BE2B7BAFDC00EC413C /* NPFloatConfig.swift in Sources */,
 				02220CAD2B90CFC700B5706C /* KeypadStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
