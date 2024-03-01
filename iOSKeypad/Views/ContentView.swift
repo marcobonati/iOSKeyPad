@@ -24,7 +24,7 @@ struct ContentView: View {
         currencyFormatter.currencySymbol = ""
     }
     
-    let keypadStyle = KeypadStyle(numberButtonStyle: KeypadStyle.MaterialKeypabButtonStyle, deleteButtonImage: Image(.backspace))
+    let keypadStyle = KeypadStyle(numberButtonStyle: KeypadStyle.DefaultKeypabButtonStyle, deleteButtonImage: Image(.backspaceFill))
     
     
     var body: some View {
@@ -47,7 +47,8 @@ struct ContentView: View {
                 KeypadView(values: $values,
                            showSecondaryButtons: $showMathOperations,
                            totalAmount: $amount,
-                           expression: $expression)
+                           expression: $expression,
+                style: keypadStyle)
                     .frame(maxHeight: 380)
                     .padding()
                 Spacer()

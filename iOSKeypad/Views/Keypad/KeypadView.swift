@@ -62,7 +62,8 @@ public struct KeypadView: View, KeypadButtonDelegate {
                         KeypadButton(KeypadButtonModel(buttonType: .Operator_Addition,
                                                        delegate: self,
                                                        text: "+"),
-                                     style: numberButtonStyle)
+                                     style: numberButtonStyle,
+                                     alternativeFont: style?.operatorButtonFont)
                     }
                 }
                 HStack {
@@ -82,7 +83,8 @@ public struct KeypadView: View, KeypadButtonDelegate {
                         KeypadButton(KeypadButtonModel(buttonType: .Operator_Subtraction,
                                                        delegate: self,
                                                        text: "-"),
-                                     style: numberButtonStyle)
+                                     style: numberButtonStyle,
+                                     alternativeFont: style?.operatorButtonFont)
                     }
                 }
                 HStack {
@@ -100,7 +102,8 @@ public struct KeypadView: View, KeypadButtonDelegate {
                         KeypadButton(KeypadButtonModel(buttonType: .Operator_Equals,
                                                        delegate: self,
                                                        text: "="),
-                                     style: numberButtonStyle)
+                                     style: numberButtonStyle,
+                                     alternativeFont: style?.operatorButtonFont)
                     }
                 }
                 HStack {
@@ -113,16 +116,21 @@ public struct KeypadView: View, KeypadButtonDelegate {
                     KeypadButton(KeypadButtonModel(buttonType: .Accessory_Delete,
                                                    delegate: self,
                                                    text: "",
-                                                   image: Image(systemName: "delete.left.fill")), style: numberButtonStyle)
+                                                   image: deleteImage()), style: numberButtonStyle)
                     if showSecondaryButtons {
                         KeypadButton(KeypadButtonModel(buttonType: .Accessory_Clear,
                                                        delegate: self,
                                                        text: "C"),
-                                     style: numberButtonStyle)
+                                     style: numberButtonStyle, 
+                                     alternativeFont: style?.operatorButtonFont)
                     }
                 }
             }
         }
+    }
+    
+    func deleteImage()-> Image {
+        return self.style?.deleteButtonImage ?? Image(systemName: "delete.left.fill")
     }
     
     func onButtonLongPress(button: KeypadButtonType) {

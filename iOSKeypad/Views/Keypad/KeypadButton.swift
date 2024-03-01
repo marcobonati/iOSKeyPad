@@ -66,10 +66,12 @@ struct KeypadButton: View {
     
     var model: KeypadButtonModel
     var style: KeypadButtonStyle
+    var alternativeFont: Font?
     
-    init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil){
+    init(_ model: KeypadButtonModel, style: KeypadButtonStyle? = nil, alternativeFont: Font? = nil){
         self.model = model
         self.style = style ?? KeypadButtonStyle()
+        self.alternativeFont = alternativeFont
     }
     
     var body: some View {
@@ -100,6 +102,10 @@ struct KeypadButton: View {
                     }
             }
         }
+    }
+    
+    private func buttonFont()-> Font {
+        return alternativeFont ?? style.font
     }
 
 }
